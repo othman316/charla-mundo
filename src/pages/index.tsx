@@ -9,7 +9,12 @@ const Home: NextPage = () => {
   const [theValue, setTheValue] = useState("");
   const { data, isLoading } = api.example.getValue.useQuery();
 
-  const { mutate: addValueMutation } = api.example.addValue.useMutation();
+  const apiContext = api.useContext();
+  const { mutate: addValueMutation } = api.example.addValue.useMutation({
+    onSuccess: async () => {
+      await apiContext.example.getValue.invalidate();
+    },
+  });
   return (
     <>
       <Head>
@@ -21,7 +26,7 @@ const Home: NextPage = () => {
         <div className="flex flex-col items-center gap-2">
           <div className="">
             <p className="text-2xl text-white">value</p>
-            {isLoading ? <LoadingSpinner /> : <p>{data.value}</p>}
+            {isLoading ? <LoadingSpinner /> : <p>{data?.value}</p>}
           </div>
           <div className="">
             <p className="text-2xl text-white">Add value</p>
