@@ -3,23 +3,19 @@ import { z } from "zod";
 import {
   createTRPCRouter,
   publicProcedure,
-  protectedProcedure,
 } from "~/server/api/trpc";
+import { redis } from "~/server/redisDB";
 
 export const exampleRouter = createTRPCRouter({
-  hello: publicProcedure
-    .input(z.object({ text: z.string() }))
-    .query(({ input }) => {
-      return {
-        greeting: `Hello ${input.text}`,
-      };
+  addValue: publicProcedure
+    .input(z.object({ value: z.string() }))
+    .mutation(async ({ input }) => {
+      await redis.set('key', input);
     }),
 
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.example.findMany();
-  }),
+  getValue: publicProcedure.query(async () => {
+    const data = await redis.get('key');
 
-  getSecretMessage: protectedProcedure.query(() => {
-    return "you can now see this secret message!";
+    return data
   }),
 });
