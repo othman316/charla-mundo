@@ -18,6 +18,11 @@ export const exampleRouter = createTRPCRouter({
     .mutation(async ({ input }) => {
       await redis.set('key', input);
     }),
+  addValueMySQL: publicProcedure
+    .input(z.object({ value: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.value.update({ where: { id: 'clhir8s4j0000jhmjma1cjsvk' }, data: { value: input.value } })
+    }),
 
   getValue: publicProcedure
     .output(z.object({ value: z.string() }))
@@ -25,6 +30,13 @@ export const exampleRouter = createTRPCRouter({
       const data: redisValue | null = await redis.get('key');
       if (!data) throw new TRPCError({ code: "NOT_FOUND", message: "Not a string" })
 
+      return data;
+    }),
+  getValueMySQL: publicProcedure
+    .output(z.object({ value: z.string() }))
+    .query(async ({ ctx }) => {
+      const data = await ctx.prisma.value.findFirst({ where: { id: { equals: 'clhir8s4j0000jhmjma1cjsvk' } } })
+      if (!data) throw new TRPCError({ code: 'NOT_FOUND', message: "not a string" })
       return data;
     }),
 });

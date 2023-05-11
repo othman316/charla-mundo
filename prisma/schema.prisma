@@ -64,3 +64,8 @@ model VerificationToken {
 
     @@unique([identifier, token])
 }
+
+model Value {
+    id    String @id @default(cuid())
+    value String
+}
