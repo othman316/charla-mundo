@@ -22,14 +22,14 @@ const ChatInput: FC<ChatInputProps> = ({ conversationId }) => {
   };
 
   return (
-    <div className="w-[60%]">
+    <div className="">
       <form>
         <label className="sr-only">Your message</label>
-        <div className="flex items-center rounded-lg bg-gray-50 px-3 py-2 dark:bg-gray-700">
+        <div className="flex items-center rounded-lg bg-gray-50 px-3 py-2">
           <input
             onChange={(e) => setNewMessageContent(e.target.value)}
             value={newMessageContent}
-            className="mx-4 block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+            className="focus:ring-blue-500dark:placeholder-gray-400 mx-4 block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900 focus:border-blue-500"
             placeholder="Your message..."
             onKeyDown={(e) => {
               if (e.key === "Enter") {

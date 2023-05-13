@@ -1,27 +1,25 @@
 import { signOut, useSession } from "next-auth/react";
-import Image from "next/image";
 import Link from "next/link";
 import { type FC } from "react";
 import { SiTheconversation } from "react-icons/si";
 import { FaUserFriends, FaSignOutAlt } from "react-icons/fa";
 import { MdSettings } from "react-icons/md";
 import { useRouter } from "next/router";
+import UserImage from "./UserImage";
 
 const NavigationBar: FC = ({}) => {
   const { data: session } = useSession();
   const { pathname } = useRouter();
 
   return (
-    <div className="flex flex-grow flex-col items-center justify-between bg-gradient-to-b from-blueGray to-plum py-5">
+    <div className="max-w[5%] flex h-screen max-h-screen w-[5%] min-w-[5%] flex-col items-center justify-between bg-gradient-to-b from-blueGray to-plum px-2 py-5">
       <div className="">
         <div className="">
           {session?.user.image && (
-            <Image
-              src={session?.user.image}
-              width={48}
-              height={48}
-              alt={`${session?.user.name ?? ""}'s profile picture`}
-              className="rounded-full border-2 border-customGreen"
+            <UserImage
+              size={42}
+              user={session.user}
+              className={"rounded-full border-2 border-customGreen"}
             />
           )}
         </div>

@@ -2,8 +2,8 @@ import { type FC } from "react";
 import { type RouterOutputs, api } from "~/utils/api";
 import LoadingSpinner from "./LoadingSpinner";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 import { getRelativeTime } from "~/server/helpers/getRelativeTime";
+import UserImage from "./UserImage";
 
 const ConvoList: FC = ({}) => {
   const { data: conversations, isLoading: conversationsLoading } =
@@ -11,7 +11,7 @@ const ConvoList: FC = ({}) => {
   if (conversationsLoading) return <LoadingSpinner />;
   if (!conversations) return <div>No Data!</div>;
   return (
-    <div className="flex h-screen w-[100%] flex-col gap-3 overflow-y-scroll px-5 ">
+    <div className=" flex h-screen w-[28%] min-w-[28%] max-w-[28%] flex-col gap-3 overflow-y-scroll px-4 py-4">
       {[
         ...conversations,
         ...conversations,
@@ -45,17 +45,11 @@ const ConvoInAList: FC<ConvoInAListProps> = ({ conversation }) => {
   if (!theOtherUser) return <>User Not Found</>;
 
   return (
-    <div className="w-full  rounded-lg bg-customGreen p-4 text-gray-900 shadow">
+    <div className="w-full rounded-lg bg-customGreen p-4 text-gray-900 shadow">
       <div className="flex items-center">
         <div className="relative inline-block shrink-0">
           {theOtherUser.image && theOtherUser.name && (
-            <Image
-              className="h-12 w-12 rounded-full"
-              src={theOtherUser.image}
-              alt={`${theOtherUser.name}'s profile picture`}
-              height={36}
-              width={36}
-            />
+            <UserImage user={theOtherUser} />
           )}
         </div>
         <div className="ml-3 w-full text-sm font-normal">

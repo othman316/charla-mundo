@@ -4,13 +4,15 @@ interface LoadingSpinnerProps {
   size?: number;
 }
 
-const LoadingSpinner: FC<LoadingSpinnerProps> = ({}) => {
+const LoadingSpinner: FC<LoadingSpinnerProps> = ({ size }) => {
   return (
     <div className="text-center">
       <div role="status">
         <svg
           aria-hidden="true"
-          className="mr-2 inline h-8 w-8 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600"
+          className="mr-2 inline animate-spin fill-blue-600 text-gray-200 dark:text-gray-600"
+          width={size}
+          height={size}
           viewBox="0 0 100 101"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
