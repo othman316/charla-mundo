@@ -1,29 +1,21 @@
 import { type NextPage } from "next";
+import { useSession } from "next-auth/react";
 import Head from "next/head";
-import { useState } from "react";
-import Button from "~/components/Button";
+import { useRouter } from "next/router";
+import ConvoList from "~/components/ConvoList";
+import ConvoView from "~/components/ConvoView";
 import LoadingSpinner from "~/components/LoadingSpinner";
 import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
-  const [redisValue, setRedisValue] = useState("");
-  const [mySQLValue, setMySQLValue] = useState("");
-  const { data: redisData, isLoading: isRedisLoading } =
-    api.example.getValue.useQuery();
-  const { data: mySQLData, isLoading: isMySQLLoading } =
-    api.example.getValueMySQL.useQuery();
-
-  const apiContext = api.useContext();
-  const { mutate: addValueToRedis } = api.example.addValue.useMutation({
-    onSuccess: async () => {
-      await apiContext.example.getValue.invalidate();
-    },
-  });
-  const { mutate: addValueToMySQL } = api.example.addValueMySQL.useMutation({
-    onSuccess: async () => {
-      await apiContext.example.getValueMySQL.invalidate();
-    },
-  });
+  const { data: sessionData } = useSession();
+  const { push } = useRouter();
+  if (!sessionData?.user) {
+    void (async () => await push("/login"))();
+  }
+  const { data: conversations, isLoading: conversationsLoading } =
+    api.messages.getConversationsByUserId.useQuery();
+  if (!conversations) return <LoadingSpinner />;
   return (
     <>
       <Head>
@@ -32,43 +24,22 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen items-center justify-center gap-20 bg-gradient-to-b from-blueGray to-plum text-white">
-        <div className="flex flex-col items-center gap-2">
-          <h1>Redis</h1>
-          <div className="">
-            <p className="text-2xl text-white">value</p>
-            {isRedisLoading ? <LoadingSpinner /> : <p>{redisData?.value}</p>}
-          </div>
-          <div className="">
-            <p className="text-2xl text-white">Add value</p>
-            <input
-              className="bg-blueGray p-2"
-              type="text"
-              value={redisValue}
-              onChange={(e) => setRedisValue(e.target.value)}
-            />
-            <Button onClick={() => addValueToRedis({ value: redisValue })}>
-              Add Value
-            </Button>
-          </div>
-        </div>
-        <div className="flex flex-col items-center gap-2">
-          <h1>mySQL</h1>
-          <div className="">
-            <p className="text-2xl text-white">value</p>
-            {isMySQLLoading ? <LoadingSpinner /> : <p>{mySQLData?.value}</p>}
-          </div>
-          <div className="">
-            <p className="text-2xl text-white">Add value</p>
-            <input
-              className="bg-blueGray p-2"
-              type="text"
-              value={mySQLValue}
-              onChange={(e) => setMySQLValue(e.target.value)}
-            />
-            <Button onClick={() => addValueToMySQL({ value: mySQLValue })}>
-              Add Value
-            </Button>
-          </div>
+        <div className="flex gap-12">
+          {conversationsLoading ? (
+            <LoadingSpinner />
+          ) : (
+            conversations.map((conversation) => {
+              return (
+                <>
+                  <ConvoList />
+                  <ConvoView
+                    key={conversation.id}
+                    conversation={conversation}
+                  />
+                </>
+              );
+            })
+          )}
         </div>
       </main>
     </>

@@ -2,13 +2,7 @@ import { type VariantProps, cva } from "class-variance-authority";
 import { type FC, type ButtonHTMLAttributes } from "react";
 
 const buttonVariants = cva(
-  [
-    "focus:ring-2",
-    "rounded-lg",
-    "text-center",
-    "focus:outline-none",
-    "focus:ring-1",
-  ],
+  ["focus:ring-2", "text-center", "focus:outline-none", "focus:ring-1"],
   {
     variants: {
       buttonColor: {

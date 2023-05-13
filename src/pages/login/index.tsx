@@ -1,40 +1,20 @@
-import { signIn, signOut, useSession } from "next-auth/react";
-import { type FC } from "react";
-import Button from "~/components/Button";
-import ProviderButtons from "~/components/ProviderButtons";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import LoginUI from "~/components/LoginUI";
+import { type NextPageWithLayout } from "../_app";
 
-const Login: FC = () => {
+const Login: NextPageWithLayout = ({}) => {
   const { data: sessionData } = useSession();
-
+  const { push } = useRouter();
+  if (sessionData?.user) {
+    void (async () => await push("/"))();
+  }
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-blueGray to-plum text-white">
-      <div className="flex flex-col items-center justify-center gap-4">
-        <p className="text-center text-2xl ">
-          {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
-        </p>
-        {!sessionData ? (
-          <div className="flex flex-col">
-            <ProviderButtons
-              onClick={() => void signIn("google")}
-              provider="google"
-            />
-            <ProviderButtons
-              onClick={() => void signIn("discord")}
-              provider="discord"
-            />
-          </div>
-        ) : (
-          <Button
-            onClick={() => void signOut()}
-            buttonColor="yellow"
-            buttonSize="small"
-          >
-            Sign Out
-          </Button>
-        )}
-      </div>
+    <div>
+      <LoginUI />
     </div>
   );
 };
 
+Login.getLayout = (page) => <>{page}</>;
 export default Login;
