@@ -2,6 +2,7 @@ import { type NextPage } from "next";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import ConvoList from "~/components/ConvoList";
 import ConvoView from "~/components/ConvoView";
 import LoadingSpinner from "~/components/LoadingSpinner";
@@ -10,9 +11,13 @@ import { api } from "~/utils/api";
 const Home: NextPage = () => {
   const { data: sessionData } = useSession();
   const { push } = useRouter();
-  if (!sessionData?.user) {
-    void (async () => await push("/login"))();
-  }
+
+  useEffect(() => {
+    if (!sessionData?.user) {
+      void (async () => await push("/login"))();
+    }
+  }, [push, sessionData]);
+
   const { data: conversations, isLoading: conversationsLoading } =
     api.messages.getConversationsByUserId.useQuery();
   if (!conversations) return <LoadingSpinner />;

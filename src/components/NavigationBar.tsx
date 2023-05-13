@@ -10,7 +10,6 @@ import { useRouter } from "next/router";
 const NavigationBar: FC = ({}) => {
   const { data: session } = useSession();
   const { pathname } = useRouter();
-  console.log(pathname);
 
   return (
     <div className="flex flex-grow flex-col items-center justify-between bg-gradient-to-b from-blueGray to-plum py-5">
