@@ -5,9 +5,7 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { getRelativeTime } from "~/server/helpers/getRelativeTime";
 
-interface ConvoListProps {}
-
-const ConvoList: FC<ConvoListProps> = ({}) => {
+const ConvoList: FC = ({}) => {
   const { data: conversations, isLoading: conversationsLoading } =
     api.messages.getConversationsByUserId.useQuery();
   if (conversationsLoading) return <LoadingSpinner />;

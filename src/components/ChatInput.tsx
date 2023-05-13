@@ -1,4 +1,4 @@
-import { useState, type FC, type KeyboardEvent } from "react";
+import { useState, type FC } from "react";
 import { api } from "~/utils/api";
 
 interface ChatInputProps {
@@ -35,7 +35,7 @@ const ChatInput: FC<ChatInputProps> = ({ conversationId }) => {
               if (e.key === "Enter") {
                 e.preventDefault();
 
-                handleSendMessage(e);
+                handleSendMessage();
               }
             }}
           ></input>

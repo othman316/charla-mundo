@@ -1,8 +1,6 @@
 import { type FC } from "react";
 
-interface FriendsProps {}
-
-const Friends: FC<FriendsProps> = ({}) => {
+const Friends: FC = ({}) => {
   return <div>Friends</div>;
 };
 

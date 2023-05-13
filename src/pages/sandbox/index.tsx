@@ -1,8 +1,6 @@
 import { type FC } from "react";
 
-interface indexProps {}
-
-const index: FC<indexProps> = ({}) => {
+const index: FC = ({}) => {
   return (
     <div className="flex justify-between">
       <div className="">name</div>

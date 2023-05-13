@@ -1,8 +1,6 @@
 import { type FC } from "react";
 
-interface SettingsProps {}
-
-const Settings: FC<SettingsProps> = ({}) => {
+const Settings: FC = ({}) => {
   return <div>Settings</div>;
 };
 
