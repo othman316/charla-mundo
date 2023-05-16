@@ -1,12 +1,17 @@
 import { type FC } from "react";
+import { SiBeatsbydre } from "react-icons/si";
+import Button from "~/components/Button";
+import { useBearStore } from "~/utils/zustand";
 
-const index: FC = ({}) => {
+const SandBox: FC = ({}) => {
+  const { increase, bears } = useBearStore();
+
   return (
     <div className="flex justify-between">
-      <div className="">name</div>
-      <span className="">time</span>
+      <div className="">{bears}</div>
+      <span className="">hello </span>
     </div>
   );
 };
 
-export default index;
+export default SandBox;

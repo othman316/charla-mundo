@@ -24,12 +24,7 @@ const Home: NextPage = () => {
   }, [push, sessionData]);
 
   const { data: conversations, isLoading: conversationsLoading } =
-    api.messages.getConversationsByUserId.useQuery(undefined, {
-      onSuccess: (data) => {
-        const [convo] = data;
-        setCurrentConvo(convo);
-      },
-    });
+    api.messages.getConversationsByUserId.useQuery();
 
   return (
     <>
@@ -42,7 +37,7 @@ const Home: NextPage = () => {
           <LoadingPage size={68} />
         ) : (
           <div className="flex">
-            <ConvoList />
+            <ConvoList setCurrentConvo={setCurrentConvo} />
             {currentConvo && <ConvoView conversation={currentConvo} />}
           </div>
         )}

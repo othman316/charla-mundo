@@ -1,11 +1,19 @@
-import { type FC } from "react";
+import { type SetStateAction, type FC, type Dispatch } from "react";
 import { type RouterOutputs, api } from "~/utils/api";
 import LoadingSpinner from "./LoadingSpinner";
 import { useSession } from "next-auth/react";
 import { getRelativeTime } from "~/server/helpers/getRelativeTime";
 import UserImage from "./UserImage";
+type conversationType =
+  RouterOutputs["messages"]["getConversationsByUserId"][number];
 
-const ConvoList: FC = ({}) => {
+interface ConvoListProps {
+  setCurrentConvo: Dispatch<
+    SetStateAction<conversationType | undefined | null>
+  >;
+}
+
+const ConvoList: FC<ConvoListProps> = ({ setCurrentConvo }) => {
   const { data: conversations, isLoading: conversationsLoading } =
     api.messages.getConversationsByUserId.useQuery();
   if (conversationsLoading) return <LoadingSpinner />;
@@ -24,20 +32,28 @@ const ConvoList: FC = ({}) => {
         ...conversations,
       ].map((conversation) => {
         return (
-          <ConvoInAList key={conversation.id} conversation={conversation} />
+          <ConvoInAList
+            setCurrentConvo={setCurrentConvo}
+            key={conversation.id}
+            conversation={conversation}
+          />
         );
       })}
     </div>
   );
 };
 
-type conversationType =
-  RouterOutputs["messages"]["getConversationsByUserId"][number];
 interface ConvoInAListProps {
   conversation: conversationType;
+  setCurrentConvo: Dispatch<
+    SetStateAction<conversationType | undefined | null>
+  >;
 }
 
-const ConvoInAList: FC<ConvoInAListProps> = ({ conversation }) => {
+const ConvoInAList: FC<ConvoInAListProps> = ({
+  setCurrentConvo,
+  conversation,
+}) => {
   const { data: sessionData } = useSession();
   const theOtherUser = conversation.participants.find(
     (participant) => participant.id !== sessionData?.user.id
@@ -45,7 +61,10 @@ const ConvoInAList: FC<ConvoInAListProps> = ({ conversation }) => {
   if (!theOtherUser) return <>User Not Found</>;
 
   return (
-    <div className="w-full rounded-lg bg-customGreen p-4 text-gray-900 shadow">
+    <div
+      onClick={() => setCurrentConvo(conversation)}
+      className="w-full cursor-pointer rounded-lg bg-customGreen p-4 text-gray-900 shadow"
+    >
       <div className="flex items-center">
         <div className="relative inline-block shrink-0">
           {theOtherUser.image && theOtherUser.name && (
