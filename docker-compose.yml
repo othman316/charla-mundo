@@ -1,0 +1,17 @@
+version: "2.18"
+services:
+  mariadb:
+    image: mariadb:10.6.13
+    ports:
+      - 3306:3306
+    environment:
+      - MARIADB_ROOT_PASSWORD=123456
+
+  next-app:
+    build: .
+    ports:
+      - 3000:3000
+    environment:
+      - DATABASE_URL:'mysql://user:123456@$mariadb:3306/development?connect_timeout=60&pool_timeout=60&socket_timeout=60'
+    volumes:
+      - ./:/app

@@ -1,6 +1,6 @@
 import { type FC } from "react";
 
-const Friends: FC = ({}) => {
+const Friends: FC = () => {
   return <div>Friends</div>;
 };
 
