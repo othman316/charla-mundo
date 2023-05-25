@@ -1,7 +1,7 @@
 import { type FC } from "react";
 
 const Friends: FC = () => {
-  return <div>Friends</div>;
+  return <div>Friendss</div>;
 };
 
 export default Friends;
